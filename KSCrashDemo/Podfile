@@ -17,4 +17,5 @@ target 'KSCrashDemo' do
     # Pods for testing
   end
 pod 'KSCrash'
+pod 'DoraemonKit'
 end

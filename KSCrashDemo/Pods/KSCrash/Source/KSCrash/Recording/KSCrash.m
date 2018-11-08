@@ -58,23 +58,20 @@
 @end
 
 
-static NSString* getBundleName()
-{
+static NSString* getBundleName() {
     NSString* bundleName = [[[NSBundle mainBundle] infoDictionary] objectForKey:@"CFBundleName"];
-    if(bundleName == nil)
-    {
+    if(bundleName == nil) {
         bundleName = @"Unknown";
     }
     return bundleName;
 }
 
-static NSString* getBasePath()
-{
+static NSString* getBasePath() {
     NSArray* directories = NSSearchPathForDirectoriesInDomains(NSCachesDirectory,
                                                                NSUserDomainMask,
                                                                YES);
-    if([directories count] == 0)
-    {
+    if([directories count] == 0) {
+        /// 无法定位缓存目录路径
         KSLOG_ERROR(@"Could not locate cache directory path.");
         return nil;
     }

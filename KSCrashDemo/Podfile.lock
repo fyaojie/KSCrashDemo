@@ -1,4 +1,9 @@
 PODS:
+  - DoraemonKit (1.0.2):
+    - DoraemonKit/Core (= 1.0.2)
+    - PNChart
+  - DoraemonKit/Core (1.0.2):
+    - PNChart
   - KSCrash (1.15.18):
     - KSCrash/Installations (= 1.15.18)
   - KSCrash/Installations (1.15.18):
@@ -62,17 +67,27 @@ PODS:
     - KSCrash/Reporting/Tools
   - KSCrash/Reporting/Tools (1.15.18):
     - KSCrash/Recording
+  - PNChart (0.8.9):
+    - UICountingLabel (~> 1.2.0)
+  - UICountingLabel (1.2.0)
 
 DEPENDENCIES:
+  - DoraemonKit
   - KSCrash
 
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
+    - DoraemonKit
     - KSCrash
+    - PNChart
+    - UICountingLabel
 
 SPEC CHECKSUMS:
+  DoraemonKit: 0cbfddb896a2925b471d1538f1033e4cfad39db1
   KSCrash: 5394936f41e5c1ef7b79cf79b30d53299b0c160e
+  PNChart: 84774d225c2126ded6c93d4dbe6ae98c3a73c2d2
+  UICountingLabel: 1db4e7d023e1762171eb226d6dff47a7a84f27aa
 
-PODFILE CHECKSUM: bc7c8c191579e8fa280f509ff8070be8c93d2a69
+PODFILE CHECKSUM: 2550ab9d74f2f924bba0d420c5f001904342801d
 
 COCOAPODS: 1.5.3

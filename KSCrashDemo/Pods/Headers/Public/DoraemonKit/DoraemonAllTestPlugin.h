@@ -1,0 +1,1 @@
+../../../DoraemonKit/DoraemonKit/Src/Core/Plugin/AllTest/DoraemonAllTestPlugin.h

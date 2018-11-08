@@ -5,24 +5,23 @@
 //
 //  Copyright (c) 2012 Karl Stenerud. All rights reserved.
 //
-// Permission is hereby granted, free of charge, to any person obtaining a copy
-// of this software and associated documentation files (the "Software"), to deal
-// in the Software without restriction, including without limitation the rights
-// to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-// copies of the Software, and to permit persons to whom the Software is
-// furnished to do so, subject to the following conditions:
+//在此，任何人如欲索取副本，均可获免费许可
+//本软件及相关文档文件(以下简称“软件”)的处理
+//在软件中不受限制，包括不受限制的权利
+//使用、复制、修改、合并、发布、分发、再授权和/或销售
+//软件的副本，并允许软件的使用者
+//在符合下列条件的情况下，提供下列条件:
 //
-// The above copyright notice and this permission notice shall remain in place
-// in this source code.
+//上述版权公告及本许可公告应继续有效
+//在这个源代码。
 //
-// THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-// IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-// FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-// AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-// LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-// OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-// THE SOFTWARE.
-//
+//本软件是“按原样”提供的，不提供任何形式、明示或其他保证
+//包括但不限于适销性保证，
+//适合于特定用途和不侵权。在任何情况下都不能
+//作者或版权所有者对任何索赔、损害赔偿或其他责任
+//责任，无论是在合同诉讼，侵权行为或其他，产生于，
+//与软件或使用或其他交易有关的
+//该软件。
 
 
 #import <Foundation/Foundation.h>
@@ -47,236 +46,226 @@ typedef enum
 } KSCDeleteBehavior;
 
 /**
- * Reports any crashes that occur in the application.
+ * 报告应用程序中发生的任何崩溃。
  *
- * The crash reports will be located in $APP_HOME/Library/Caches/KSCrashReports
+ * 崩溃报告将位于$APP_HOME/Library/ cache /KSCrashReports中
  */
 @interface KSCrash : NSObject
 
 #pragma mark - Configuration -
 
-/** Init KSCrash instance with custom base path. */
+/**  用定制的基路径初始化KSCrash实例*/
 - (id) initWithBasePath:(NSString *)basePath;
 
-/** A dictionary containing any info you'd like to appear in crash reports. Must
- * contain only JSON-safe data: NSString for keys, and NSDictionary, NSArray,
- * NSString, NSDate, and NSNumber for values.
- *
- * Default: nil
+/**
+ *  包含任何你想在崩溃报告中出现的信息的字典。必须
+ *  只包含JSON-safe数据:NSString的键，和NSDictionary, NSArray，
+ *  NSString, NSDate和NSNumber的值。
+ *  默认值: nil
  */
 @property(atomic,readwrite,retain) NSDictionary* userInfo;
 
-/** What to do after sending reports via sendAllReportsWithCompletion:
+/** 通过sendAllReportsWithCompletion发送报告后该怎么办:
  *
- * - Use KSCDeleteNever if you will manually manage the reports.
- * - Use KSCDeleteAlways if you will be using an alert confirmation (otherwise it
- *   will nag the user incessantly until he selects "yes").
- * - Use KSCDeleteOnSuccess for all other situations.
  *
- * Default: KSCDeleteAlways
+ * 如果要手动管理报表，请使用KSCDeleteNever。
+ * - 如果您要使用警报确认(否则)，请始终使用KSCDeleteAlways 将不断唠叨用户，直到他选择“是”)。
+ * 在所有其他情况下使用KSCDeleteOnSuccess。
+ *
+ * 默认: KSCDeleteAlways
  */
 @property(nonatomic,readwrite,assign) KSCDeleteBehavior deleteBehaviorAfterSendAll;
 
-/** The monitors that will or have been installed.
- * Note: This value may change once KSCrash is installed if some monitors
- *       fail to install.
+/** 将安装或已经安装的监视器。
+ * 注意:如果某些监视器无法安装，那么一旦安装了KSCrash，这个值可能会改变。
  *
- * Default: KSCrashMonitorTypeProductionSafeMinimal
+ * 默认: KSCrashMonitorTypeProductionSafeMinimal
  */
 @property(nonatomic,readwrite,assign) KSCrashMonitorType monitoring;
 
-/** Maximum time to allow the main thread to run without returning.
- * If a task occupies the main thread for longer than this interval, the
- * watchdog will consider the queue deadlocked and shut down the app and write a
- * crash report.
+/** 允许主线程不返回运行的最大时间。
+ * 如果任务占用主线程的时间超过此间隔，则watchdog会考虑队列陷入僵局，关闭app并写入一个事故报告。
  *
- * Note: You must have added KSCrashMonitorTypeMainThreadDeadlock to the monitoring
- *       property in order for this to have any effect.
+ * 注意:您必须在监视中添加了KSCrashMonitorTypeMainThreadDeadlock属性，以便产生任何效果
  *
- * Warning: Make SURE that nothing in your app that runs on the main thread takes
- * longer to complete than this value or it WILL get shut down! This includes
- * your app startup process, so you may need to push app initialization to
- * another thread, or perhaps set this to a higher value until your application
- * has been fully initialized.
+ * 警告:确保你的应用程序中没有任何东西在主线程上运行
+ * 完成的时间要比这个值长，否则它会被关闭!这包括
+ * 你的应用程序启动过程，所以你可能需要推送应用程序初始化到
+ * 另一个线程，或者可能将其设置为更高的值，直到您的应用程序
+ * 已完全初始化。
+
  *
- * WARNING: This is still causing false positives in some cases. Use at own risk!
+ * 警告:在某些情况下，这仍然会导致误报。自担风险使用!
  *
- * 0 = Disabled.
+ * 0 = 禁用.
  *
- * Default: 0
+ * 默认: 0
  */
 @property(nonatomic,readwrite,assign) double deadlockWatchdogInterval;
 
-/** If YES, introspect memory contents during a crash.
- * Any Objective-C objects or C strings near the stack pointer or referenced by
- * cpu registers or exceptions will be recorded in the crash report, along with
- * their contents.
+/** 如果是，请在崩溃期间内省内存内容。
+ * 栈指针或引用的任何Objective-C对象或C字符串，cpu寄存器或异常将记录在崩溃报告中，他们的内容。
  *
- * Default: YES
+ * 默认: YES
  */
 @property(nonatomic,readwrite,assign) BOOL introspectMemory;
 
-/** If YES, monitor all Objective-C/Swift deallocations and keep track of any
- * accesses after deallocation.
+/** 如果是，监控所有Objective-C/Swift的交易并跟踪任何交易
+ * 回收后访问。
  *
- * Default: NO
+ * 默认: NO
  */
 @property(nonatomic,readwrite,assign) BOOL catchZombies;
 
-/** List of Objective-C classes that should never be introspected.
- * Whenever a class in this list is encountered, only the class name will be recorded.
- * This can be useful for information security concerns.
+/**
+ * 不应该被反省的Objective-C类的列表。
+ * 当遇到这个列表中的类时，只会记录类名。
+ * 这对于关注信息安全很有用。
  *
  * Default: nil
  */
 @property(nonatomic,readwrite,retain) NSArray* doNotIntrospectClasses;
 
-/** The maximum number of reports allowed on disk before old ones get deleted.
+/** 在删除旧报表之前磁盘上允许的最大报表数量。
  *
- * Default: 5
+ * 默认: 5
  */
 @property(nonatomic,readwrite,assign) int maxReportCount;
 
-/** The report sink where reports get sent.
- * This MUST be set or else the reporter will not send reports (although it will
- * still record them).
+/** 报告在发送报告的地方下沉。
+ * 这必须设置，否则记者将不会发送报告(尽管它会发送报告仍然记录)。
  *
- * Note: If you use an installation, it will automatically set this property.
- *       Do not modify it in such a case.
+ * 注意:如果使用安装，它会自动设置此属性。
+ * 在这种情况下不要修改它。
  */
 @property(nonatomic,readwrite,retain) id<KSCrashReportFilter> sink;
 
-/** C Function to call during a crash report to give the callee an opportunity to
- * add to the report. NULL = ignore.
+/** 在崩溃报告期间调用C函数，以给被调用方一个机会
+ * 添加到报告中。NULL =忽略。
  *
- * WARNING: Only call async-safe functions from this function! DO NOT call
- * Objective-C methods!!!
+ * 警告:只能从这个函数调用异步安全的函数!不叫 objective - c方法! ! !
  *
- * Note: If you use an installation, it will automatically set this property.
- *       Do not modify it in such a case.
+ * 注意:如果使用安装，它会自动设置此属性。
+ * 在这种情况下不要修改它。
  */
 @property(nonatomic,readwrite,assign) KSReportWriteCallback onCrash;
 
-/** Add a copy of KSCrash's console log messages to the crash report.
+/** 将KSCrash控制台日志消息的副本添加到崩溃报告中。
  */
 @property(nonatomic,readwrite,assign) BOOL addConsoleLogToReport;
 
-/** Print the previous app run log to the console when installing KSCrash.
- *  This is primarily for debugging purposes.
+/** 在安装KSCrash时，将上一个应用程序运行日志打印到控制台。
+ *  这主要用于调试目的。
  */
 @property(nonatomic,readwrite,assign) BOOL printPreviousLog;
 
-/** Which languages to demangle when getting stack traces (default KSCrashDemangleLanguageAll) */
+/** 在获取堆栈跟踪(默认的KSCrashDemangleLanguageAll)时，应该考虑哪种语言 */
 @property(nonatomic,readwrite,assign) KSCrashDemangleLanguage demangleLanguages;
 
-/** Exposes the uncaughtExceptionHandler if set from KSCrash. Is nil if debugger is running. **/
+/** 如果从KSCrash设置，将公开uncaughtExceptionHandler。如果调试器正在运行，则为nil。 **/
 @property (nonatomic, assign) NSUncaughtExceptionHandler *uncaughtExceptionHandler;
 
-/** Exposes the currentSnapshotUserReportedExceptionHandler if set from KSCrash. Is nil if debugger is running. **/
+/** 如果从KSCrash设置，则公开currentSnapshotUserReportedExceptionHandler。如果调试器正在运行，则为nil。. **/
 @property (nonatomic, assign) NSUncaughtExceptionHandler *currentSnapshotUserReportedExceptionHandler;
 
-#pragma mark - Information -
+#pragma mark - Information - 信息
 
-/** Total active time elapsed since the last crash. */
+/** 自上次崩溃以来的总活动时间。 */
 @property(nonatomic,readonly,assign) NSTimeInterval activeDurationSinceLastCrash;
 
-/** Total time backgrounded elapsed since the last crash. */
+/** 自上次崩溃以来的总回溯时间. */
 @property(nonatomic,readonly,assign) NSTimeInterval backgroundDurationSinceLastCrash;
 
-/** Number of app launches since the last crash. */
+/** 自上次崩溃以来应用程序的发布数量. */
 @property(nonatomic,readonly,assign) int launchesSinceLastCrash;
 
-/** Number of sessions (launch, resume from suspend) since last crash. */
+/** 自上次崩溃以来的会话数量(启动，从暂停恢复)。 */
 @property(nonatomic,readonly,assign) int sessionsSinceLastCrash;
 
-/** Total active time elapsed since launch. */
+/** 自启动以来的总活动时间。 */
 @property(nonatomic,readonly,assign) NSTimeInterval activeDurationSinceLaunch;
 
-/** Total time backgrounded elapsed since launch. */
+/** 自发射以来的总回溯时间。 */
 @property(nonatomic,readonly,assign) NSTimeInterval backgroundDurationSinceLaunch;
 
-/** Number of sessions (launch, resume from suspend) since app launch. */
+/** 自应用程序启动以来的会话数量(启动，从暂停恢复)。 */
 @property(nonatomic,readonly,assign) int sessionsSinceLaunch;
 
-/** If true, the application crashed on the previous launch. */
+/** 如果为真，则应用程序在上一次启动时崩溃。 */
 @property(nonatomic,readonly,assign) BOOL crashedLastLaunch;
 
-/** The total number of unsent reports. Note: This is an expensive operation. */
+/** 未发送报告的总数。注意:这是一个昂贵的操作。 */
 @property(nonatomic,readonly,assign) int reportCount;
 
-/** Information about the operating system and environment */
+/** 关于操作系统和环境的信息 */
 @property(nonatomic,readonly,strong) NSDictionary* systemInfo;
 
 #pragma mark - API -
 
-/** Get the singleton instance of the crash reporter.
+/** 获取崩溃报告器的单例实例。
  */
 + (KSCrash*) sharedInstance;
 
-/** Install the crash reporter.
- * The reporter will record crashes, but will not send any crash reports unless
- * sink is set.
+/**安装事故报告。
+ * 记者将记录崩溃，但不会发送任何崩溃报告，除非
+ * 水槽。
  *
- * @return YES if the reporter successfully installed.
+ * @return 是的，如果记者安装成功。
  */
 - (BOOL) install;
 
-/** Send all outstanding crash reports to the current sink.
- * It will only attempt to send the most recent 5 reports. All others will be
- * deleted. Once the reports are successfully sent to the server, they may be
- * deleted locally, depending on the property "deleteAfterSendAll".
+/** 将所有未完成的崩溃报告发送到当前的接收器。
+ * 只会尝试发送最近的5份报告。所有其他内容将被删除。一旦报告被成功发送到服务器，它们就可能被发送
+ * 根据属性“deleteAfterSendAll”在本地删除
  *
- * Note: property "sink" MUST be set or else this method will call onCompletion
- *       with an error.
+ * 注意:必须设置属性“sink”，否则此方法将在完成时调用一个错误。
  *
- * @param onCompletion Called when sending is complete (nil = ignore).
+ * @param onCompletion 发送完成时调用(nil = ignore)。
  */
 - (void) sendAllReportsWithCompletion:(KSCrashReportFilterCompletion) onCompletion;
 
-/** Get all unsent report IDs.
+/** 获取所有未发送的报表id。
  *
- * @return An array with report IDs.
+ * @return 具有报表id的数组。
  */
 - (NSArray*) reportIDs;
 
-/** Get report.
+/** 得到报告。
  *
- * @param reportID An ID of report.
+ * @param reportID 报告的ID。
  *
- * @return A dictionary with report fields. See KSCrashReportFields.h for available fields.
+ * @return 带有报表字段的字典。看到KSCrashReportFields。h表示可用字段。
  */
 - (NSDictionary*) reportWithID:(NSNumber*) reportID;
 
-/** Delete all unsent reports.
+/** 删除所有未发送的报告。
  */
 - (void) deleteAllReports;
 
-/** Delete report.
+/** 删除报告。
  *
- * @param reportID An ID of report to delete.
+ * @param reportID 要删除的报告的ID。
  */
 - (void) deleteReportWithID:(NSNumber*) reportID;
 
-/** Report a custom, user defined exception.
- * This can be useful when dealing with scripting languages.
+/** 报告一个自定义的用户定义异常。
+ * 这在处理脚本语言时非常有用。
  *
- * If terminateProgram is true, all sentries will be uninstalled and the application will
- * terminate with an abort().
+ * 如果终止程序为真，所有岗哨将被卸载，应用程序将以abort()终止。
  *
- * @param name The exception name (for namespacing exception types).
+ * @param name 异常名称(用于命名空间的异常类型)。
  *
- * @param reason A description of why the exception occurred.
+ * @param reason 对发生异常的原因的描述。
  *
- * @param language A unique language identifier.
+ * @param language 唯一的语言标识符。
  *
- * @param lineOfCode A copy of the offending line of code (nil = ignore).
+ * @param lineOfCode 有问题的代码行(nil = ignore)的副本。
  *
- * @param stackTrace An array of frames (dictionaries or strings) representing the call stack leading to the exception (nil = ignore).
+ * @param stackTrace 表示导致异常(nil = ignore)的调用堆栈的帧(字典或字符串)数组。
  *
- * @param logAllThreads If true, suspend all threads and log their state. Note that this incurs a
- *                      performance penalty, so it's best to use only on fatal errors.
+ * @param logAllThreads 如果为真，挂起所有线程并记录它们的状态。注意，这将导致性能损失，所以最好只在致命错误上使用。
  *
- * @param terminateProgram If true, do not return from this function call. Terminate the program instead.
+ * @param terminateProgram 如果为真，请不要从此函数调用返回。终止程序。
  */
 - (void) reportUserException:(NSString*) name
                       reason:(NSString*) reason
@@ -289,8 +278,8 @@ typedef enum
 @end
 
 
-//! Project version number for KSCrashFramework.
+//!KSCrashFramework的项目版本号。
 FOUNDATION_EXPORT const double KSCrashFrameworkVersionNumber;
 
-//! Project version string for KSCrashFramework.
+//! KSCrashFramework的项目版本字符串。
 FOUNDATION_EXPORT const unsigned char KSCrashFrameworkVersionString[];
